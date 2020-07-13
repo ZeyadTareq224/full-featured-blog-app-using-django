@@ -1,0 +1,84 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<section class="ftco-section">
+  <div class="container mt-5">
+    <div class="row justify-content-center mb-5 pb-5">
+      <div class="col-md-7 text-center heading-section ftco-animate">
+        <span>Blog</span>
+        <h2>Read my blog</h2>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8">
+
+        <h2 class="mb-3">{{post.title}}</h2>
+        <p>{{post.content}}</p>
+        <p>
+          <img src="{{post.img.url}}" alt="" class="img-fluid">
+        </p>
+        
+        <div class="tag-widget post-tag-container mb-5 mt-5">
+
+          <div class="tagcloud">
+            {% for tag in tags %}
+            <a href="#" class="tag-cloud-link">{{tag.name}}</a>
+            {% endfor %}
+          </div>
+          <div class="pt-5 mt-5">
+            <h3 class="mb-5">{{no_of_comments}} Comments</h3>
+            {% for comment in comments %}
+
+            <ul class="comment-list">
+              <li class="comment">
+                <div class="vcard bio">
+                  <img src="images/person_1.jpg" alt="">
+                </div>
+                <div class="comment-body">
+                  <h3>{{comment.user}}</h3>
+                  <div class="meta">{{comment.created_date}}</div>
+                  <p>{{comment.comment}}</p>
+                </div>
+
+              </li>
+              {% endfor %}
+              <!-- END comment-list -->
+            </ul>
+            {% if user.is_authenticated %}
+
+            <div class="comment-form-wrap pt-5">
+              <h3 class="mb-5">Leave a comment</h3>
+              <form action="", method="POST">
+                {% csrf_token %}
+
+
+                <div class="form-group">
+                  {{form|crispy}}
+                </div>
+                <div class="form-group">
+                  <input type="submit" value="Post Comment" class="btn py-3 px-4 btn-primary">
+                </div>
+
+              </form>
+            </div>
+            {% else %}
+            <div class="comment-form-wrap pt-5">
+              <h5 class="mb-5">You need to login in order to add comments to this post</h5>
+              <span><a href="{% url 'register' %}">Sign Up</a><br></span> <span><a href="{% url 'login-page' %}">Sign In</a></span>
+            </div>
+            {% endif %}
+          </div>
+          {% if post.user == user %}
+          <span><a class="btn btn-outline-info" href="{% url 'update-post'  post.id %}">Update</a></span>
+          <span><a class="btn btn-outline-danger" href="{% url 'delete-post' post.id %}">Delete</a></span>
+          {% endif %}
+          <sapn><a class="btn btn-outline-warning" href="{% url 'blog-home' %}">Go Back</a></sapn>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  {% endblock content %}
