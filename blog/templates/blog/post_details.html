@@ -15,7 +15,7 @@
       <div class="col-md-8">
 
         <h2 class="mb-3">{{post.title}}</h2>
-        <p>{{post.content}}</p>
+        <p>{{post.content|safe}}</p>
         <p>
           <img src="{{post.img.url}}" alt="" class="img-fluid">
         </p>
